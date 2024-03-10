@@ -15,6 +15,8 @@ import pages.ContactPage;
 import pages.LoginPage;
 import pages.MainPage;
 
+import java.io.IOException;
+
 import static config.BaseTest.getDriver;
 
 public class PhoneBookTest extends BaseTest {
@@ -38,18 +40,18 @@ public class PhoneBookTest extends BaseTest {
     }}
   @Test
     @Description("User already exist. Login and add contact.")
-    public void loginOfAnExistingUserAddContact() throws InterruptedException {
+    public void loginOfAnExistingUserAddContact() throws InterruptedException, IOException {
         Allure.description("User already exist. Login and add contact.!");
         MainPage mainPage = new MainPage(getDriver());
         Allure.step("Step 1");
 
-      LoginPage lpage = mainPage.openTopMenu(TopMenuItem.LOGIN.toString());
+      LoginPage lpage = mainPage.openTopMenu(TopMenuItems.LOGIN.toString());
 
         lpage.fillEmailField(PropertiesReader.getProperty("existingUserEmail"))
                 .fillPasswordField(PropertiesReader.getProperty("existingUserPassword"))
                 .clickByLoginButton();
 
-        MainPage.openTopMenu(TopMenuItem.ADD.toString());
+        MainPage.openTopMenu(TopMenuItems.ADD.toString());
         AddPage addPage = new AddPage(getDriver());
         Contact newContact = new Contact(NameAndLastNameGenerator.generateName(),
                 NameAndLastNameGenerator.generateLastName(),
@@ -59,10 +61,9 @@ public class PhoneBookTest extends BaseTest {
                 "new description");
         newContact.toString();
         addPage.fillFormAndSave(newContact);
-        ContactsPage contactsPage = new ContactsPage(getDriver());
-        Assert.assertTrue(contactsPage.getDataFromContactList(newContact));
+        ContactPage contactPage = new ContactPage(getDriver());
+        Assert.assertTrue(contactPage.getDataFromContactList(newContact));
         TakeScreen.takeScreenshot("screen");
         Thread.sleep(3000);
 
     }
-}
