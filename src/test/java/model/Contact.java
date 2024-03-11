@@ -11,6 +11,10 @@ public class Contact {
     private String address;
     private String description;
 
+    public Contact() {
+
+    }
+
     public String getName() {
         return name;
     }

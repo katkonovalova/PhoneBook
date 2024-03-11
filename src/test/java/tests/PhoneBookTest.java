@@ -20,7 +20,6 @@ import java.io.IOException;
 import static config.BaseTest.getDriver;
 
 public class PhoneBookTest extends BaseTest {
-
     @Test(description = "The test checks the empty field warning declaration.")
     @Parameters("browser")
     public void registrationWithoutPassword(@Optional("chrome") String browser) throws InterruptedException {
@@ -28,24 +27,23 @@ public class PhoneBookTest extends BaseTest {
 
         MainPage mainPage = new MainPage(getDriver());
         Allure.step("Click by Login button");
-        LoginPage loginPage = mainPage.openTopMenu(TopMenuItems.LOGIN.toString());
+        LoginPage loginPage = MainPage.openTopMenu(TopMenuItems.LOGIN.toString());
         Allure.step("Click by Reg button");
+        // loginPage.fillEmailField("myemail@mail.com").clickByRegistartionButton();
         String expectedString = "Wrong";
 
-
-       Alert alert= (Alert) loginPage.fillEmailField("myemail@mail.com").clickByRegistartionButton();
+        Alert alert = (Alert) loginPage.fillEmailField("myemail@mail.com").clickByRegistartionButton();
         boolean isAlertHandled = AlertHandler.handleAlert(alert, expectedString);
         Assert.assertTrue(isAlertHandled);
 
-    }}
-  @Test
+    }
+    @Test
     @Description("User already exist. Login and add contact.")
     public void loginOfAnExistingUserAddContact() throws InterruptedException, IOException {
         Allure.description("User already exist. Login and add contact.!");
         MainPage mainPage = new MainPage(getDriver());
         Allure.step("Step 1");
-
-      LoginPage lpage = mainPage.openTopMenu(TopMenuItems.LOGIN.toString());
+        LoginPage lpage = MainPage.openTopMenu(TopMenuItems.LOGIN.toString());
 
         lpage.fillEmailField(PropertiesReader.getProperty("existingUserEmail"))
                 .fillPasswordField(PropertiesReader.getProperty("existingUserPassword"))
@@ -56,14 +54,17 @@ public class PhoneBookTest extends BaseTest {
         Contact newContact = new Contact(NameAndLastNameGenerator.generateName(),
                 NameAndLastNameGenerator.generateLastName(),
                 PhoneNumberGenerator.generatePhoneNumber(),
-                EmailGenerator.generateEmail(10,5,3),
+                EmailGenerator.generateEmail(10, 5, 3),
                 AddressGenerator.generateAddress(),
                 "new description");
         newContact.toString();
         addPage.fillFormAndSave(newContact);
-        ContactPage contactPage = new ContactPage(getDriver());
-        Assert.assertTrue(contactPage.getDataFromContactList(newContact));
+        ContactPage contactsPage = new ContactPage(getDriver());
+        Assert.assertTrue(contactsPage.getDataFromContactList(newContact));
         TakeScreen.takeScreenshot("screen");
         Thread.sleep(3000);
 
     }
+}
+
+

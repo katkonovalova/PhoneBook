@@ -17,7 +17,6 @@ public class AlertHandler {
             return alertText.contains(expectedText);
         }
         return false;
-
     }
 }
 

@@ -1,6 +1,7 @@
 
 package pages;
 
+import config.BaseTest;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -13,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class LoginPage extends BasePage{
+public class LoginPage extends BasePage {
     @FindBy(xpath = "//input[@name='email']") // Эта строка использует аннотацию @FindBy для поиска веб-элемента на веб-странице с помощью XPath-выражения. В данном случае, элемент найден по XPath, который ищет <input> элемент с атрибутом name, равным "email".
     // Найденный элемент сохраняется в переменной emailField типа WebElement.
     WebElement emailField;
