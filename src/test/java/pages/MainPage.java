@@ -15,19 +15,14 @@ public class MainPage extends BasePage{
     }
 
     public static <T extends BasePage> T openTopMenu(String topMenuItem){
-        WebElement menuItem = driver.findElement(By.xpath("//a[contains(text(),'"+topMenuItem+"')]"));
+        WebElement menuItem = driver.findElement(By.xpath("//a[contains(text(),'" + topMenuItem + "')]"));
         menuItem.click();
-        switch (topMenuItem){
-            case "HOME":
-                return (T) new HomePage(driver);
-            case "ABOUT":
-                return (T) new AboutPage(driver);
-            case "LOGIN":
-                return (T) new LoginPage(driver);
-
-            default: throw new IllegalArgumentException("Something wrong" + topMenuItem);
-
-
-        }
+        return switch (topMenuItem) {
+            case "HOME" -> (T) new HomePage(driver);
+            case "ABOUT" -> (T) new AboutPage(driver);
+            case "LOGIN" -> (T) new LoginPage(driver);
+            case "ADD" ->  (T) new AddPage(driver);
+            default -> throw new IllegalArgumentException("Something wrong " + topMenuItem);
+        };
     }
 }

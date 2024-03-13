@@ -17,9 +17,10 @@ import pages.MainPage;
 
 import java.io.IOException;
 
-import static config.BaseTest.getDriver;
+import static pages.MainPage.openTopMenu;
 
 public class PhoneBookTest extends BaseTest {
+
     @Test(description = "The test checks the empty field warning declaration.")
     @Parameters("browser")
     public void registrationWithoutPassword(@Optional("chrome") String browser) throws InterruptedException {
@@ -27,12 +28,11 @@ public class PhoneBookTest extends BaseTest {
 
         MainPage mainPage = new MainPage(getDriver());
         Allure.step("Click by Login button");
-        LoginPage loginPage = MainPage.openTopMenu(TopMenuItems.LOGIN.toString());
+        LoginPage loginPage = openTopMenu(TopMenuItems.LOGIN.toString());
         Allure.step("Click by Reg button");
-        // loginPage.fillEmailField("myemail@mail.com").clickByRegistartionButton();
         String expectedString = "Wrong";
 
-        Alert alert = (Alert) loginPage.fillEmailField("myemail@mail.com").clickByRegistartionButton();
+        Alert alert= (Alert) loginPage.fillEmailField("myemail@mail.com").clickByRegistartionButton();
         boolean isAlertHandled = AlertHandler.handleAlert(alert, expectedString);
         Assert.assertTrue(isAlertHandled);
 
@@ -43,22 +43,24 @@ public class PhoneBookTest extends BaseTest {
         Allure.description("User already exist. Login and add contact.!");
         MainPage mainPage = new MainPage(getDriver());
         Allure.step("Step 1");
-        LoginPage lpage = MainPage.openTopMenu(TopMenuItems.LOGIN.toString());
-
+        LoginPage lpage = openTopMenu(TopMenuItems.LOGIN.toString());
+        Allure.step("Step 2");
         lpage.fillEmailField(PropertiesReader.getProperty("existingUserEmail"))
                 .fillPasswordField(PropertiesReader.getProperty("existingUserPassword"))
                 .clickByLoginButton();
+        Allure.step("Step 3");
 
-        MainPage.openTopMenu(TopMenuItems.ADD.toString());
+        openTopMenu(TopMenuItems.ADD.toString());
         AddPage addPage = new AddPage(getDriver());
         Contact newContact = new Contact(NameAndLastNameGenerator.generateName(),
                 NameAndLastNameGenerator.generateLastName(),
                 PhoneNumberGenerator.generatePhoneNumber(),
-                EmailGenerator.generateEmail(10, 5, 3),
+                EmailGenerator.generateEmail(10,5,3),
                 AddressGenerator.generateAddress(),
                 "new description");
         newContact.toString();
         addPage.fillFormAndSave(newContact);
+
         ContactPage contactsPage = new ContactPage(getDriver());
         Assert.assertTrue(contactsPage.getDataFromContactList(newContact));
         TakeScreen.takeScreenshot("screen");
@@ -66,5 +68,3 @@ public class PhoneBookTest extends BaseTest {
 
     }
 }
-
-

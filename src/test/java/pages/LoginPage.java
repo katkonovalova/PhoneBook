@@ -1,7 +1,5 @@
-
 package pages;
 
-import config.BaseTest;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -9,12 +7,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class LoginPage extends BasePage {
+public class LoginPage extends BasePage{
     @FindBy(xpath = "//input[@name='email']") // Эта строка использует аннотацию @FindBy для поиска веб-элемента на веб-странице с помощью XPath-выражения. В данном случае, элемент найден по XPath, который ищет <input> элемент с атрибутом name, равным "email".
     // Найденный элемент сохраняется в переменной emailField типа WebElement.
     WebElement emailField;
@@ -38,17 +37,13 @@ public class LoginPage extends BasePage {
         emailField.sendKeys(email);
         return  this;  // Затем метод возвращает объект LoginPage, что позволяет использовать этот метод в цепочке вызовов
     }
-    public LoginPage clickByRegistartionButton(){ // Этот метод кликает по кнопке регистрации на веб-странице.
+
+    public Alert clickByRegistartionButton(){ // Этот метод кликает по кнопке регистрации на веб-странице.
         // Он вызывает метод click() для registrationButton.
         registrationButton.click();
-        return this; // Затем он также возвращает объект LoginPage, чтобы этот метод также можно было использовать в цепочке вызовов.
+        return getAlertIfPresent(); // Затем он также возвращает объект LoginPage, чтобы этот метод также можно было использовать в цепочке вызовов.
     }
 
-    public LoginPage clicByPasswordFild() {
-        passwordField.click();
-        return this;
-
-    }
     public LoginPage fillPasswordField(String password){
         passwordField.sendKeys(password);
         return this;
@@ -57,69 +52,31 @@ public class LoginPage extends BasePage {
     public BasePage clickByLoginButton(){
         loginButton.click();
         Alert alert = getAlertIfPresent();
-        if (alert!=null){
+        if(alert != null){
             alert.accept();
             return new LoginPage(driver);
-        }else{
-            return new ContactPage(driver);
+        }else {return new ContactPage(driver);
         }
+
     }
+
+    /**
+     * private Alert getAlertIfPresent() {: Это объявление метода getAlertIfPresent(),
+     * который возвращает объект класса Alert (если всплывающее окно присутствует) или null (если всплывающего окна нет).
+     * @return Alert / null
+     */
     private Alert getAlertIfPresent(){
         try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(5000));
-            return wait.until(ExpectedConditions.alertIsPresent());
-        } catch(TimeoutException e) {
-            System.out.println("Alert Issue"+ e);
-            return null;
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(3000)); // Создается новый объект класса WebDriverWait,
+            // который ожидает определенный период времени (в данном случае 5000 миллисекунд или 5 секунд).
+            // Он используется для ожидания появления всплывающего окна.
+            return wait.until(ExpectedConditions.alertIsPresent()); // ExpectedConditions.alertIsPresent() указывает,
+            // что мы ждем, пока всплывающее окно не появится. Как только оно появится, метод until() возвращает это всплывающее окно.
+        }catch(TimeoutException e){
+            System.out.println("Alert issue "+e);
+            return  null; // Возвращается null, что означает, что всплывающего окна не было обнаружено.
         }
-    }
 
+    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*package pages;
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
-
-public class LogInPage extends BasePage{
-    @FindBy(xpath = "//input[@name='email']")
-    WebDriver emailField;
-
-
-    @FindBy(xpath = "//button[@name='registration']")
-    WebDriver registrationButton;
-
-
-    public LogInPage(WebDriver driver){
-        setDriver(driver);
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver,20), this);
-    }
-    public LogInPage fillEmailField(String email){
-        emailField.sendKeys(email);
-        return this;
-    }
-    public LogInPage clickByRegistrationButton(){
-        registrationButton.click();
-        return this;
-
-    }
-}
-*/

@@ -12,8 +12,8 @@ public class PropertiesReader {
         Properties properties = new Properties();
         try(FileInputStream fis = new FileInputStream(PROPERTIES_FILE_PATH)){
             properties.load(fis);
-            return properties.getProperty(key)
-                    ;
+            return properties.getProperty(key);
+
         }catch (IOException exception){
             exception.printStackTrace();
             return null;

@@ -57,5 +57,4 @@ public class AddPage extends  BasePage{
                 .visibilityOfElementLocated(By.xpath("//b[contains(text(),'Save')]")));
         saveButton.click();
     }
-
 }
